@@ -1,5 +1,5 @@
-import express from 'express';
-import fetch from 'node-fetch';
+import express, {Request, Response} from 'express';
+import Api from './api.js';
 
 const app: express.Application = express();
 
@@ -12,26 +12,38 @@ app.use((_req, res, next) => {
 })
 app.use(express.json());
 
-const apiBaseURL : string = "https://web.spaggiari.eu/rest/v1";
-const necessaryHeaders = {
-    'Content-Type': 'application/json',
-    'Z-Dev-ApiKey': '+zorro+',
-    'User-Agent': 'zorro/1.0'
+const api = new Api();
+
+async function loginRequest(req: Request, res: Response, next: Function) {
+    const [statusCode, response] = await api.fetch(req.path, 'POST', {
+        body: req.body
+    })
+
+    res.status(statusCode).json(response);
 }
 
-app.post('/auth/login', async (_req, _res) => {
-    try {
-        const res = await fetch(`${apiBaseURL}/auth/login`, {
-            method: "POST",
-            body: JSON.stringify(_req.body),
-            headers: necessaryHeaders
-        });
+async function POSTrequest(req: Request, res: Response, next: Function) {
+    const [statusCode, response] = await api.fetch(req.path, 'POST', {
+        body: req.body,
+        extraHeaders: {
+            'Z-Auth-Token': req.header('Z-Auth-Token') || "",
+        }
+    })
 
-        _res.status(res.status).json(await res.json());
-    } catch (err: any) {
-        _res.status(500).json({"message": err.message});
-    }
-})
+    res.status(statusCode).json(response);
+}
+
+async function GETrequest(req: Request, res: Response, next: Function) {
+    const [statusCode, response] = await api.fetch(req.path, 'POST', {
+        body: req.body,
+        extraHeaders: {
+            'Z-Auth-Token': req.header('Z-Auth-Token') || "",
+        }
+    })
+
+    res.status(statusCode).json(response);
+}
+
 
 app.listen(port, () => {
     console.log("Spaggiu server operativo su porta " + port.toString());
