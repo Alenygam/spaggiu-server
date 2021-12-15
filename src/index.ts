@@ -34,5 +34,5 @@ app.post('/auth/login', async (_req, _res) => {
 })
 
 app.listen(port, () => {
-    console.log("Typescript with express");
+    console.log("Spaggiu server operativo su porta " + port.toString());
 })
