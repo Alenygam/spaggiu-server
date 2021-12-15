@@ -31,7 +31,6 @@ class Api {
     }
 
     async fetch(path: string, method: string, fetchArguments: FetchArguments): Promise<any[]> {
-        if (path.charAt(0) === "/") return [500, "La path deve iniziare con uno /"];
         const body = fetchArguments.body;
         const extraHeaders= fetchArguments.extraHeaders;
 
