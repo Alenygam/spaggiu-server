@@ -93,7 +93,7 @@ async function POSTrequest(req: Request, res: Response, next: Function) {
 }
 
 async function GETrequest(req: Request, res: Response, next: Function) {
-    const [statusCode, response] = await api.fetch(req.path, 'POST', {
+    const [statusCode, response] = await api.fetch(req.path, 'GET', {
         extraHeaders: {
             'Z-Auth-Token': req.header('Z-Auth-Token') || "",
         }
