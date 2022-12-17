@@ -46,6 +46,7 @@ class Api {
 
             return [res.status, await res.json()];
         } catch (err: any) {
+		console.error(err);
             return [500, {"message": err.message}];
         }
     }
